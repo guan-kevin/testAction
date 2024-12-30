@@ -57,7 +57,7 @@ runs:
         echo -e "db=memory\ndumpDB=false" > ${OUTPUT_DIRECTORY}/.trace-db.config
 
         echo "TRACEDB_CONFIG_PATH=${OUTPUT_DIRECTORY}/.trace-db.config" >> ${GITHUB_ENV}
-        echo "TRACEDB_PATH=${OUTPUT_DIRECTORY}" >> ${GITHUB_ENV}
+        echo "TRACEDB_PATH=${OUTPUT_DIRECTORY}/all-traces" >> ${GITHUB_ENV}
         echo "TRACEDB_RANDOM=1" >> ${GITHUB_ENV}
         echo "COLLECT_MONITORS=1" >> ${GITHUB_ENV}
         echo "COLLECT_TRACES=1" >> ${GITHUB_ENV}
@@ -77,19 +77,10 @@ runs:
           npm install @actions/artifact@2.1.11
           cd ${{ github.workspace }}
         post: |
-          cd ${{ github.action_path }}
           echo "Processing traces and violations"
-          bash post.sh ${TRACEDB_PATH}
-          echo "TRACEDB_PATH is ${TRACEDB_PATH}"
-          echo "Uploading traces"
-          echo "> A : ${OUTPUT_DIRECTORY}"
-          ls ${OUTPUT_DIRECTORY}
-          echo "> B : ${{ github.workspace }}"
-          ls ${{ github.workspace }}
-          echo "> C"
+          bash ${{ github.action_path }}/post.sh ${OUTPUT_DIRECTORY}
+          cd ${{ github.action_path }}
           tar -czvf traces.tar.gz ${OUTPUT_DIRECTORY}
-          echo "> D : $(pwd)"
-          ls
           node post.js
           cd ${{ github.workspace }}
       env:
