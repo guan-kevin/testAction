@@ -66,7 +66,7 @@ runs:
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
     - name: Add exit hook
-      uses: pyTooling/Actions/with-post-step@v3.1.1
+      uses: ${{ github.action_path }}/with-post-step
       with:
         main: |
           echo "Adding exit hook"
