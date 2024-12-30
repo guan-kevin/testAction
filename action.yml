@@ -70,6 +70,7 @@ runs:
       with:
         main: |
           echo "Adding exit hook"
+          node post.js
         post: |
           echo "Processing traces"
           exec ${{ github.action_path }}/post.sh ${{ github.workspace }}/traces
