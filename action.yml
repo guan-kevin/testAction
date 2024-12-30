@@ -81,13 +81,13 @@ runs:
           echo "Processing traces and violations"
           bash post.sh ${{ github.workspace }}/traces
           echo "Uploading traces"
-          echo "> A"
+          echo "> A : ${OUTPUT_DIRECTORY}"
           ls ${OUTPUT_DIRECTORY}
-          echo "> B"
+          echo "> B : ${{ github.workspace }}"
           ls ${{ github.workspace }}
           echo "> C"
           tar -czvf traces.tar.gz ${OUTPUT_DIRECTORY}
-          echo "> D"
+          echo "> D : $(pwd)"
           ls
           node post.js
           cd ${{ github.workspace }}
