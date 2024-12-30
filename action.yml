@@ -75,7 +75,7 @@ runs:
           TRACEDB_PATH=${{ github.workspace }}/traces
           if [[ -f ${TRACEDB_PATH}/unique-traces.txt ]]; then
             mv ${TRACEDB_PATH}/unique-traces.txt ${TRACEDB_PATH}/traces-id.txt
-            (time python3 tracemop/scripts/count-traces-frequency.py ${TRACEDB_PATH}
+            python3 tracemop/scripts/count-traces-frequency.py ${TRACEDB_PATH}
             rm ${TRACEDB_PATH}/traces-id.txt ${TRACEDB_PATH}/traces.txt
           fi
           
@@ -88,7 +88,7 @@ runs:
             fi
         
             mv ${OUTPUT_DIR}/${db}/unique-traces.txt ${OUTPUT_DIR}/${db}/traces-id.txt
-            (time python3 ${SCRIPT_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}/) &>> ${OUTPUT_DIR}/logs/process.log
+            python3 ${SCRIPT_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}
             rm ${OUTPUT_DIR}/${db}/traces-id.txt ${OUTPUT_DIR}/${db}/traces.txt
             num_db=$((num_db + 1))
             last_db=${db}
