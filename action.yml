@@ -18,8 +18,8 @@ runs:
   steps:
     - name: Download TraceMOP
       run: |
-        git clone https://${TOKEN}@github.com/SoftEngResearch/tracemop_internal
-        pushd tracemop_internal &> /dev/null
+        git clone https://${TOKEN}@github.com/SoftEngResearch/tracemop_internal tracemop
+        pushd tracemop &> /dev/null
         git checkout trie
         popd &> /dev/null
       shell: bash
@@ -29,21 +29,21 @@ runs:
     - name: Install TraceMOP
       run: |
         echo "::group::Install TraceMOP"
-        mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+        mvn install:install-file -Dfile=tracemop/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         echo "::endgroup::"
       shell: bash
 
     - name: Setup extension and agent
       run: |
         echo "::group::Setup extension"
-        cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
+        cp tracemop/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
         echo "::endgroup::"
 
         echo "::group::Setup agent"
         if [[ ${COLLECT_TRACES} == true ]]; then
-          mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+          mvn install:install-file -Dfile=tracemop/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         else
-          mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/no-track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+          mvn install:install-file -Dfile=tracemop/plugin/src/main/resources/no-track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         fi
         echo "::endgroup::"
       shell: bash
@@ -71,4 +71,40 @@ runs:
         main: |
           echo "Adding exit hook"
         post: |
-          echo "Exiting..."
+          echo "Processing traces"
+          TRACEDB_PATH=${{ github.workspace }}/traces
+          if [[ -f ${TRACEDB_PATH}/unique-traces.txt ]]; then
+            mv ${TRACEDB_PATH}/unique-traces.txt ${TRACEDB_PATH}/traces-id.txt
+            (time python3 tracemop/scripts/count-traces-frequency.py ${TRACEDB_PATH}
+            rm ${TRACEDB_PATH}/traces-id.txt ${TRACEDB_PATH}/traces.txt
+          fi
+          
+          local num_db=0
+          local last_db=""
+          for db in $(ls ${TRACEDB_PATH}/../ | grep "all-traces-"); do
+            # search directory starts with all-traces-*
+            if [[ ! -f ${OUTPUT_DIR}/${db}/unique-traces.txt || ! -f ${OUTPUT_DIR}/${db}/specs-frequency.csv || ! -f ${OUTPUT_DIR}/${db}/locations.txt || ! -f ${OUTPUT_DIR}/${db}/traces.txt ]]; then
+              continue
+            fi
+        
+            mv ${OUTPUT_DIR}/${db}/unique-traces.txt ${OUTPUT_DIR}/${db}/traces-id.txt
+            (time python3 ${SCRIPT_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}/) &>> ${OUTPUT_DIR}/logs/process.log
+            rm ${OUTPUT_DIR}/${db}/traces-id.txt ${OUTPUT_DIR}/${db}/traces.txt
+            num_db=$((num_db + 1))
+            last_db=${db}
+          done
+        
+          if [[ ! -d ${TRACEDB_PATH} || -z $(ls -A ${TRACEDB_PATH}) ]]; then
+            rm -rf ${TRACEDB_PATH}
+          fi
+          
+          if [[ ${num_db} -eq 1 ]]; then
+            mv ${OUTPUT_DIR}/${db} ${TRACEDB_PATH}
+          fi
+
+          echo "Listing all violations:"
+          for violations in $(find -name violations-count); do
+            if [[ -f ${violations} ]];
+              cat ${violations}
+            fi
+          done
