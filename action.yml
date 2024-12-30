@@ -69,15 +69,15 @@ runs:
       uses: pyTooling/Actions/with-post-step@v3.1.1
       with:
         main: |
-          pushd ${{ github.action_path }} &> /dev/null
+          cd ${{ github.action_path }}
           echo "Adding exit hook"
           npm install @actions/artifact
           node post.js
-          popd &> /dev/null
+          cd  ${{ github.workspace }}
         post: |
-          pushd ${{ github.action_path }} &> /dev/null
+          cd ${{ github.action_path }}
           echo "Processing traces and violations"
           bash post.sh ${{ github.workspace }}/traces
           echo "Uploading traces"
           node post.js
-          popd &> /dev/null
+          cd ${{ github.workspace }}
