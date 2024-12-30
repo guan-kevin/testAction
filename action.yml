@@ -70,6 +70,7 @@ runs:
       with:
         main: |
           echo "Adding exit hook"
+          npm i @actions/artifact
           node ${{ github.action_path }}/post.js
         post: |
           echo "Processing traces and violations"
