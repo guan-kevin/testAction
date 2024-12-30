@@ -66,10 +66,10 @@ runs:
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
     - run: |
-        ls /home/runner/work/NullArray/NullArray/actions/with-post-step
-        ls /home/runner/work/NullArray/NullArray/actions/
-        ls /home/runner/work/NullArray/NullArray/
         ls /home/runner/work/NullArray
+        ls /home/runner/work/NullArray/NullArray/
+        ls /home/runner/work/NullArray/NullArray/actions/
+        ls /home/runner/work/NullArray/NullArray/actions/with-post-step
       shell: bash
     - name: Add exit hook
       uses: ./actions/with-post-step
