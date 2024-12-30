@@ -10,12 +10,7 @@ async function main() {
     // name of the artifact
     'my-artifact',
     // files to include (supports absolute and relative paths)
-    ['./traces.tar.gz'],
-    {
-      // optional: how long to retain the artifact
-      // if unspecified, defaults to repository/org retention settings (the limit of this value)
-      retentionDays: 10
-    }
+    ['/home/runner/work/NullArray/NullArray/pom.xml'],
   )
   
   console.log(`Created artifact with id: ${id} (bytes: ${size}`)
