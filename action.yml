@@ -31,7 +31,7 @@ runs:
       shell: bash
 
     - name: Setup extension
-      run: cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar ${MAVEN_HOME}/lib/ext
+      run: cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
       shell: bash
 
     - name: Setup TraceMOP
