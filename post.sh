@@ -32,7 +32,7 @@ fi
 
 echo "Listing all violations:"
 for violations in $(find -name violations-count); do
-  if [[ -f ${violations} ]];
+  if [[ -f ${violations} ]]; then
     cat ${violations}
   fi
 done
