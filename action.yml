@@ -80,7 +80,7 @@ runs:
           echo "Processing traces and violations"
           bash ${{ github.action_path }}/post.sh ${OUTPUT_DIRECTORY}
           cd ${{ github.action_path }}
-          tar -czvf traces.tar.gz ${OUTPUT_DIRECTORY}
+          tar -czf traces.tar.gz ${OUTPUT_DIRECTORY} &> /dev/null
           node post.js
           cd ${{ github.workspace }}
       env:
