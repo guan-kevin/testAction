@@ -72,6 +72,7 @@ runs:
           echo "Adding exit hook"
           node ${{ github.action_path }}/post.js
         post: |
-          echo "Processing traces"
-          exec ${{ github.action_path }}/post.sh ${{ github.workspace }}/traces
+          echo "Processing traces and violations"
+          bash ${{ github.action_path }}/post.sh ${{ github.workspace }}/traces
+          echo "Uploading traces"
           node ${{ github.action_path }}/post.js
