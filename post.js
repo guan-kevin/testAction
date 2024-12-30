@@ -4,7 +4,8 @@ async function main() {
   const {DefaultArtifactClient} = require('@actions/artifact')
   
   console.log('test 2')
-  
+
+  const artifact = new DefaultArtifactClient()
   const {id, size} = await artifact.uploadArtifact(
     // name of the artifact
     'my-artifact',
