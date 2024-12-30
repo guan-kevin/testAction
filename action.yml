@@ -27,17 +27,25 @@ runs:
         TOKEN: ${{ inputs.token }}
 
     - name: Install TraceMOP
-      run: mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+      run: |
+        echo "::group::Install TraceMOP"
+        mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+        echo "::endgroup::"
       shell: bash
 
     - name: Setup extension and agent
       run: |
+        echo "::group::Setup extension"
         cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
+        echo "::endgroup::"
+
+        echo "::group::Setup agent"
         if [[ ${COLLECT_TRACES} == true ]]; then
           mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         else
           mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/no-track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         fi
+        echo "::endgroup::"
       shell: bash
       env:
         COLLECT_TRACES: ${{ inputs.collect-traces }}
@@ -53,6 +61,7 @@ runs:
         echo "TRACEDB_RANDOM=1" >> ${GITHUB_ENV}
         echo "COLLECT_MONITORS=1" >> ${GITHUB_ENV}
         echo "COLLECT_TRACES=1" >> ${GITHUB_ENV}
+        echo "RVMLOGGINGLEVEL=UNIQUE" >> ${GITHUB_ENV}
       shell: bash
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
