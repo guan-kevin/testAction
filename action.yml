@@ -63,6 +63,7 @@ runs:
         echo "COLLECT_TRACES=1" >> ${GITHUB_ENV}
         echo "RVMLOGGINGLEVEL=UNIQUE" >> ${GITHUB_ENV}
 
+        echo "LS ${OUTPUT_DIRECTORY}"
         ls ${OUTPUT_DIRECTORY}
       shell: bash
       env:
@@ -73,7 +74,7 @@ runs:
         main: |
           cd ${{ github.action_path }}
           echo "Adding exit hook"
-          npm install @actions/artifact
+          npm install @actions/artifact@2.1.11
           cd ${{ github.workspace }}
         post: |
           cd ${{ github.action_path }}
