@@ -65,3 +65,9 @@ runs:
       shell: bash
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
+
+    - name: Add exit hook
+      uses: ./actions/with-post-steps
+      with:
+        main: echo "Adding exit hook"
+        post: echo "Exiting..."
