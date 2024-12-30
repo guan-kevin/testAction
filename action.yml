@@ -70,6 +70,7 @@ runs:
         ls /home/runner/work/NullArray/NullArray/actions/
         ls /home/runner/work/NullArray/NullArray/
         ls /home/runner/work/NullArray
+      shell: bash
     - name: Add exit hook
       uses: ./actions/with-post-step
       with:
