@@ -79,7 +79,8 @@ runs:
         post: |
           cd ${{ github.action_path }}
           echo "Processing traces and violations"
-          bash post.sh ${{ github.workspace }}/traces
+          bash post.sh ${TRACEDB_PATH}
+          echo "TRACEDB_PATH is ${TRACEDB_PATH}"
           echo "Uploading traces"
           echo "> A : ${OUTPUT_DIRECTORY}"
           ls ${OUTPUT_DIRECTORY}
