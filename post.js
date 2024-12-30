@@ -8,7 +8,7 @@ async function main() {
   const artifact = new DefaultArtifactClient()
   const {id, size} = await artifact.uploadArtifact(
     // name of the artifact
-    'my-artifact',
+    'traces',
     // files to include (supports absolute and relative paths)
     ['./traces.tar.gz'],
     '/'
