@@ -31,7 +31,7 @@ if [[ ${num_db} -eq 1 ]]; then
 fi
 
 echo "Listing all violations:"
-for violations in $(find -name violations-count); do
+for violations in $(find -name violation-counts); do
   if [[ -f ${violations} ]]; then
     cat ${violations}
   fi
