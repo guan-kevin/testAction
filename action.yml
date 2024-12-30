@@ -78,6 +78,8 @@ runs:
           echo "Processing traces and violations"
           bash post.sh ${{ github.workspace }}/traces
           echo "Uploading traces"
+          ls ${{ github.workspace }}/traces
           tar -czvf traces.tar.gz ${{ github.workspace }}/traces
+          ls
           node post.js
           cd ${{ github.workspace }}
