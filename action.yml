@@ -9,17 +9,22 @@ inputs:
     description: 'Output directory for traces'
     required: true
     default: ${{ github.workspace }}/traces
+  token:
+    description: 'GITHUB TOKEN'
+    required: true
 
 runs:
   using: "composite"
   steps:
     - name: Download TraceMOP
       run: |
-        git clone https://github.com/SoftEngResearch/tracemop_internal
+        git clone https://${TOKEN}@github.com/SoftEngResearch/tracemop_internal
         pushd tracemop_internal &> /dev/null
         git checkout trie
         popd &> /dev/null
       shell: bash
+      env:
+        TOKEN: ${{ inputs.token }}
 
     - name: Install TraceMOP
       run: mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
