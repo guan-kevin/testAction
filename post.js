@@ -1,4 +1,8 @@
+console.log('test 1')
+
 import {DefaultArtifactClient} from '@actions/artifact'
+
+console.log('test 2')
 
 const {id, size} = await artifact.uploadArtifact(
   // name of the artifact
