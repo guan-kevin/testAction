@@ -10,7 +10,7 @@ async function main() {
     // name of the artifact
     'my-artifact',
     // files to include (supports absolute and relative paths)
-    ['/home/runner/work/NullArray/NullArray/pom.xml'],
+    ['./traces.tar.gz'],
     '/'
   )
   
