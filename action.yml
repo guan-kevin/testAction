@@ -65,7 +65,9 @@ runs:
       shell: bash
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
-    - run: npm install @actions/artifact
+    - run: | 
+        npm install @actions/artifact
+        node ${{ github.action_path }}/post.js
       shell: bash
     - name: Add exit hook
       uses: pyTooling/Actions/with-post-step@v3.1.1
