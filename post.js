@@ -1,6 +1,6 @@
 console.log('test 1')
 
-import {DefaultArtifactClient} from '@actions/artifact'
+const {DefaultArtifactClient} = require('@actions/artifact')
 
 console.log('test 2')
 
