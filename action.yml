@@ -67,14 +67,17 @@ runs:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
     - name: Add exit hook
       uses: pyTooling/Actions/with-post-step@v3.1.1
-      working-directory: ${{ github.action_path }}
       with:
         main: |
+          pushd ${{ github.action_path }} &> /dev/null
           echo "Adding exit hook"
           npm install @actions/artifact
           node post.js
+          popd &> /dev/null
         post: |
+          pushd ${{ github.action_path }} &> /dev/null
           echo "Processing traces and violations"
           bash post.sh ${{ github.workspace }}/traces
           echo "Uploading traces"
           node post.js
+          popd &> /dev/null
