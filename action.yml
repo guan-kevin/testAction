@@ -1,0 +1,45 @@
+name: 'TraceMOP Action'
+description: 'Run Maven project with TraceMOP'
+inputs:
+  collect-traces:
+    description: 'Whether to collect traces using TraceMOP'
+    required: true
+    default: true
+  output-directory:
+    description: 'Output directory for traces'
+    required: true
+    default: ${{ github.workspace }}/traces
+
+runs:
+  using: "composite"
+  steps:
+    - name: Download TraceMOP
+      run: |
+        git clone https://github.com/SoftEngResearch/tracemop_internal
+        pushd tracemop_internal &> /dev/null
+        git checkout trie
+        popd &> /dev/null
+      shell: bash
+
+    - name: Install TraceMOP
+      run: mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+      shell: bash
+
+    - name: Setup extension
+      run: cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar ${MAVEN_HOME}/lib/ext
+      shell: bash
+
+    - name: Setup TraceMOP
+      run: |
+        echo "Output directory is ${OUTPUT_DIRECTORY}"
+        mkdir -p ${OUTPUT_DIRECTORY}
+        echo -e "db=memory\ndumpDB=false" > ${{ github.workspace }}/.trace-db.config
+
+        echo "TRACEDB_CONFIG_PATH=${{ github.workspace }}/.trace-db.config" >> ${GITHUB_ENV}
+        echo "TRACEDB_PATH=${OUTPUT_DIRECTORY} >> ${GITHUB_ENV}
+        echo "TRACEDB_RANDOM=1" >> ${GITHUB_ENV}
+        echo "COLLECT_MONITORS=1" >> ${GITHUB_ENV}
+        echo "COLLECT_TRACES=1" >> ${GITHUB_ENV}
+      shell: bash
+      env:
+        OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
