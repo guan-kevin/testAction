@@ -30,9 +30,17 @@ runs:
       run: mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
       shell: bash
 
-    - name: Setup extension
-      run: cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
+    - name: Setup extension and agent
+      run: |
+        cp tracemop_internal/plugin/src/main/resources/javamop-extension-1.0.jar $(mvn --version | grep "Maven home" | cut -d ' ' -f 3)/lib/ext
+        if [[ ${COLLECT_TRACES} == true ]]; then
+          mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+        else
+          mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/no-track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+        fi
       shell: bash
+      env:
+        COLLECT_TRACES: ${{ inputs.collect-traces }}
 
     - name: Setup TraceMOP
       run: |
