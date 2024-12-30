@@ -29,7 +29,7 @@ runs:
     - name: Install TraceMOP
       run: |
         echo "::group::Install TraceMOP"
-        mvn -Dmaven.repo.local=\${OUTPUT_DIR}/repo install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
+        mvn install:install-file -Dfile=tracemop_internal/plugin/src/main/resources/track-no-stats-agent.jar -DgroupId="javamop-agent" -DartifactId="javamop-agent" -Dversion="1.0" -Dpackaging="jar"
         echo "::endgroup::"
       shell: bash
 
@@ -66,9 +66,13 @@ runs:
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
     - run: |
-        ls /home/runner/work/NullArray
+        echo "> /home/runner/work/NullArray"
+        ls /home/runner/work/NullArray/
+        echo "> /home/runner/work/NullArray/NullArray/"
         ls /home/runner/work/NullArray/NullArray/
+        echo "> /home/runner/work/NullArray/NullArray/actions/"
         ls /home/runner/work/NullArray/NullArray/actions/
+        echo "> /home/runner/work/NullArray/NullArray/actions/with-post-step/"
         ls /home/runner/work/NullArray/NullArray/actions/with-post-step
       shell: bash
     - name: Add exit hook
