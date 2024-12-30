@@ -72,14 +72,21 @@ runs:
           cd ${{ github.action_path }}
           echo "Adding exit hook"
           npm install @actions/artifact
-          cd  ${{ github.workspace }}
+          cd ${{ github.workspace }}
         post: |
           cd ${{ github.action_path }}
           echo "Processing traces and violations"
           bash post.sh ${{ github.workspace }}/traces
           echo "Uploading traces"
-          ls ${{ github.workspace }}/traces
-          tar -czvf traces.tar.gz ${{ github.workspace }}/traces
+          echo "> A"
+          ls ${OUTPUT_DIRECTORY}
+          echo "> B"
+          ls ${{ github.workspace }}
+          echo "> C"
+          tar -czvf traces.tar.gz ${OUTPUT_DIRECTORY}
+          echo "> D"
           ls
           node post.js
           cd ${{ github.workspace }}
+      env:
+        OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
