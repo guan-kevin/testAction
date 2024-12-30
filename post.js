@@ -9,6 +9,7 @@ async function main() {
   const {id, size} = await artifact.uploadArtifact(
     // name of the artifact
     'my-artifact',
+    '/',
     // files to include (supports absolute and relative paths)
     ['/home/runner/work/NullArray/NullArray/pom.xml'],
   )
