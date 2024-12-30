@@ -62,6 +62,8 @@ runs:
         echo "COLLECT_MONITORS=1" >> ${GITHUB_ENV}
         echo "COLLECT_TRACES=1" >> ${GITHUB_ENV}
         echo "RVMLOGGINGLEVEL=UNIQUE" >> ${GITHUB_ENV}
+
+        ls ${OUTPUT_DIRECTORY}
       shell: bash
       env:
         OUTPUT_DIRECTORY: ${{ inputs.output-directory }}
