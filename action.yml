@@ -54,9 +54,9 @@ runs:
       run: |
         echo "Output directory is ${OUTPUT_DIRECTORY}"
         mkdir -p ${OUTPUT_DIRECTORY}
-        echo -e "db=memory\ndumpDB=false" > ${OUTPUT_DIRECTORY}/.trace-db.config
-
-        echo "TRACEDB_CONFIG_PATH=${OUTPUT_DIRECTORY}/.trace-db.config" >> ${GITHUB_ENV}
+        echo -e "db=memory\ndumpDB=false" > ${{ github.workspace }}/.trace-db.config
+        
+        echo "TRACEDB_CONFIG_PATH=${{ github.workspace }}/.trace-db.config" >> ${GITHUB_ENV}
         echo "TRACEDB_PATH=${OUTPUT_DIRECTORY}/all-traces" >> ${GITHUB_ENV}
         echo "TRACEDB_RANDOM=1" >> ${GITHUB_ENV}
         echo "COLLECT_MONITORS=1" >> ${GITHUB_ENV}
