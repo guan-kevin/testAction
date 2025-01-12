@@ -1,5 +1,6 @@
 #!/bin/bash
-TRACEDB_PATH=$1
+OUTPUT_DIR=$1
+TRACEDB_PATH=${OUTPUT_DIR}/all-traces
 
 if [[ -f ${TRACEDB_PATH}/unique-traces.txt ]]; then
   mv ${TRACEDB_PATH}/unique-traces.txt ${TRACEDB_PATH}/traces-id.txt
