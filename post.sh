@@ -1,10 +1,11 @@
 #!/bin/bash
 OUTPUT_DIR=$1
+TRACEMOP_DIR=$2
 TRACEDB_PATH=${OUTPUT_DIR}/all-traces
 
 if [[ -f ${TRACEDB_PATH}/unique-traces.txt ]]; then
   mv ${TRACEDB_PATH}/unique-traces.txt ${TRACEDB_PATH}/traces-id.txt
-  python3 tracemop/scripts/count-traces-frequency.py ${TRACEDB_PATH}
+  python3 ${TRACEMOP_DIR}/scripts/count-traces-frequency.py ${TRACEDB_PATH}
   rm ${TRACEDB_PATH}/traces-id.txt ${TRACEDB_PATH}/traces.txt
 fi
 
@@ -17,7 +18,7 @@ for db in $(ls ${OUTPUT_DIR}/ | grep "all-traces-"); do
   fi
 
   mv ${OUTPUT_DIR}/${db}/unique-traces.txt ${OUTPUT_DIR}/${db}/traces-id.txt
-  python3 ${SCRIPT_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}
+  python3 ${TRACEMOP_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}
   rm ${OUTPUT_DIR}/${db}/traces-id.txt ${OUTPUT_DIR}/${db}/traces.txt
   num_db=$((num_db + 1))
   last_db=${db}
