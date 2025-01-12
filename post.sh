@@ -10,7 +10,7 @@ fi
 
 num_db=0
 last_db=""
-for db in $(ls ${TRACEDB_PATH}/../ | grep "all-traces-"); do
+for db in $(ls ${OUTPUT_DIR}/ | grep "all-traces-"); do
   # search directory starts with all-traces-*
   if [[ ! -f ${OUTPUT_DIR}/${db}/unique-traces.txt || ! -f ${OUTPUT_DIR}/${db}/specs-frequency.csv || ! -f ${OUTPUT_DIR}/${db}/locations.txt || ! -f ${OUTPUT_DIR}/${db}/traces.txt ]]; then
     continue
