@@ -69,14 +69,14 @@ runs:
       uses: pyTooling/Actions/with-post-step@v3.1.1
       with:
         main: |
-          cd ${{ github.action_path }}
+          cd ${{ github.action_path }}/.github/scripts/
           echo "Adding exit hook"
           npm install @actions/artifact@2.1.11
           cd ${{ github.workspace }}
         post: |
           echo "Processing traces and violations"
-          bash ${{ github.action_path }}/post.sh ${OUTPUT_DIRECTORY} tracemop
-          cd ${{ github.action_path }}
+          bash ${{ github.action_path }}/.github/scripts/post.sh ${OUTPUT_DIRECTORY} tracemop
+          cd ${{ github.action_path }}/.github/scripts/
           tar -czf traces.tar.gz ${OUTPUT_DIRECTORY} &> /dev/null
           node post.js
           cd ${{ github.workspace }}
