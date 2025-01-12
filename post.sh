@@ -18,7 +18,7 @@ for db in $(ls ${OUTPUT_DIR}/ | grep "all-traces-"); do
   fi
 
   mv ${OUTPUT_DIR}/${db}/unique-traces.txt ${OUTPUT_DIR}/${db}/traces-id.txt
-  python3 ${TRACEMOP_DIR}/count-traces-frequency.py ${OUTPUT_DIR}/${db}
+  python3 ${TRACEMOP_DIR}/scripts/count-traces-frequency.py ${OUTPUT_DIR}/${db}
   rm ${OUTPUT_DIR}/${db}/traces-id.txt ${OUTPUT_DIR}/${db}/traces.txt
   num_db=$((num_db + 1))
   last_db=${db}
